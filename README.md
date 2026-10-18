@@ -113,6 +113,10 @@ s^0 & \gamma_2 & 0
 
 Where the structural row elements $\gamma_1$ and $\gamma_2$ are calculated strictly from the cross-determinants of the preceding rows:
 
+$$
+\gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}
+$$
+
 1. **Calculate the $s^1$ Row Coefficient ($\gamma_1$):**
 $$
 \gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}
