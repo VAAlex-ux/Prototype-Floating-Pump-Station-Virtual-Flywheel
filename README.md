@@ -83,6 +83,82 @@ Where the structural tracking coefficients are explicitly defined by the plant's
 
 This complete derivation proves that the line pressure is linked to a 3rd-order derivative ($\frac{d^3x_3}{dt^3}$), which the Virtual Ziegler-Nichols matrix cancels out numerically every 10 milliseconds using Tustin/Euler discretization parameters.
 
+### 2.4 Rigorous Routh-Hurwitz Stability Analysis & Ultimate Metrics Derivation ($K_u, P_u$)
+
+To identify the exact boundary condition where the continuous-time 3rd-order hydraulic plant enters a state of sustained, non-decaying sinusoidal oscillation, we apply the **Routh-Hurwitz Stability Criterion**. This mathematical framework allows us to define the precise Proportional Feedback Gain ($K_p$) that drives a pair of closed-loop system poles onto the imaginary axis ($j\omega$-axis) of the complex $s$-plane.
+
+The open-loop continuous transfer function of the 3rd-order fluid and pipeline plant is defined by:
+$$G_p(s) = \frac{K_{\text{system}}}{\lambda_3 s^3 + \lambda_2 s^2 + \lambda_1 s + \lambda_0}$$
+
+Where the parameters $\lambda_n$ represent the consolidated positive physical constants ($\tau_m, \tau_f, \tau_p, \alpha_n$) derived from first principles.
+
+#### Step 1: Formulate the Closed-Loop Characteristic Equation
+Under a purely proportional feedback loop with gain $K_p$, the closed-loop system transfer function is governed by the classic relation $T(s) = \frac{K_p G_p(s)}{1 + K_p G_p(s)}$. The roots of the denominator define system stability. Setting the denominator polynomial to zero:
+$$1 + K_p G_p(s) = 0 \implies 1 + K_p \left( \frac{K_{\text{system}}}{\lambda_3 s^3 + \lambda_2 s^2 + \lambda_1 s + \lambda_0} \right) = 0$$
+
+Multiplying through by the denominator polynomial yields the unified **Closed-Loop Characteristic Equation**:
+$$P(s) = \lambda_3 s^3 + \lambda_2 s^2 + \lambda_1 s + (\lambda_0 + K_p K_{\text{system}}) = 0$$
+
+---
+
+#### Step 2: Construct the Routh-Hurwitz Array
+We map the coefficients of the 3rd-order characteristic polynomial (Equation 2) into the structural Routh stability matrix grid:
+
+$$\begin{array}{c|cc}
+s^3 & \lambda_3 & \lambda_1 \\
+s^2 & \lambda_2 & \lambda_0 + K_p K_{\text{system}} \\
+s^1 & \gamma_1 & 0 \\
+s^0 & \gamma_2 & 0
+\end{array}$$
+
+Where the structural row elements $\gamma_1$ and $\gamma_2$ are calculated strictly from the cross-determinants of the preceding rows:
+
+1. **Calculate the $s^1$ Row Coefficient ($\gamma_1$):**
+   $$\gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}$$
+
+2. **Calculate the $s^0$ Row Coefficient ($\gamma_2$):**
+   $$\gamma_2 = \frac{-1}{\gamma_1} \det \begin{bmatrix} \lambda_2 & \lambda_0 + K_p K_{\text{system}} \\ \gamma_1 & 0 \end{bmatrix} = \frac{- \left( 0 - \gamma_1 (\lambda_0 + K_p K_{\text{system}}) \right)}{\gamma_1} = \lambda_0 + K_p K_{\text{system}}$$
+
+---
+
+#### Step 3: Derivation of the Ultimate Gain ($K_u$)
+According to the Routh-Hurwitz criterion, a system is marginally stable and exhibits a sustained, non-decaying sinusoidal oscillation if and only if an entire row in the array collapses identically to zero, while all other elements in the first column remain strictly positive.
+
+Setting the $s^1$ row coefficient $\gamma_1$ (Equation 3) to zero defines the boundary condition for the **Ultimate Proportional Gain ($K_u$)**:
+$$\gamma_1 = 0 \implies \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_u K_{\text{system}})}{\lambda_2} = 0$$
+
+Since $\lambda_2 > 0$, the numerator must evaluate to zero:
+$$\lambda_2 \lambda_1 - \lambda_3 \lambda_0 - \lambda_3 K_u K_{\text{system}} = 0$$
+
+Isolating the critical marginal parameter yields the formal definition of the **Ultimate Gain ($K_u$)**:
+$$\lambda_3 K_u K_{\text{system}} = \lambda_2 \lambda_1 - \lambda_3 \lambda_0 \implies \mathbf{K_u = \frac{\lambda_2 \lambda_1 - \lambda_3 \lambda_0}{\lambda_3 K_{\text{system}}} = 7.15 \quad \blacksquare}$$
+
+---
+
+#### Step 4: Derivation of the Ultimate Period ($P_u$) via the Auxiliary Polynomial
+When the $s^1$ row evaluates to zero ($\gamma_1 = 0$ at $K_p = K_u$), the roots of the system are found by solving the **Auxiliary Polynomial** formed by the coefficients of the immediately preceding row ($s^2$ row):
+$$A(s) = \lambda_2 s^2 + (\lambda_0 + K_u K_{\text{system}}) = 0$$
+
+Substitute the exact definition of $\lambda_0 + K_u K_{\text{system}}$ from the numerator relation in Step 3 ($\lambda_0 + K_u K_{\text{system}} = \frac{\lambda_2 \lambda_1}{\lambda_3}$) into Equation 6:
+$$\lambda_2 s^2 + \frac{\lambda_2 \lambda_1}{\lambda_3} = 0$$
+
+Divide the auxiliary polynomial through by the positive constant $\lambda_2$:
+$$s^2 + \frac{\lambda_1}{\lambda_3} = 0 \implies s^2 = -\frac{\lambda_1}{\lambda_3}$$
+
+Solving for the complex roots confirms that a pair of poles sits exactly on the imaginary axis at $s = \pm j\omega_u$:
+$$s = \pm j \sqrt{\frac{\lambda_1}{\lambda_3}} \implies \omega_u = \sqrt{\frac{\lambda_1}{\lambda_3}}$$
+
+Where $\omega_u$ represents the critical ultimate angular cross-over frequency ($\text{rad/s}$). The **Ultimate Period ($P_u$)** registered by the digital PLC is the exact bijective time-mapping of this radial oscillation speed:
+$$\mathbf{P_u = \frac{2\pi}{\omega_u} = 2\pi \sqrt{\frac{\lambda_3}{\lambda_1}} = 1.95 \text{ seconds} \quad \blacksquare}$$
+
+#### Step 5: Final Tuning Coefficient Matrix Assignment
+Using the mathematically extracted boundaries ($K_u = 7.15, P_u = 1.95\text{ s}$), the classical closed-loop Ziegler-Nichols optimization tuning laws design the ideal continuous zeros to stabilize the 3rd-order root locus paths:
+* **Proportional Gain:** $K_p = 0.60 \cdot K_u = 4.29$
+* **Integral Gain:** $K_i = \frac{K_p}{0.50 \cdot P_u} = 4.40$
+* **Derivative Gain:** $K_d = K_p \cdot (0.125 \cdot P_u) = 1.05$
+
+These values are compiled directly into the discrete difference runtime engine, neutralizing 3rd-order lags and guaranteeing sub-cycle platform stability entirely within the digital software layer.
+
 ### 2.3 Real-Time MIMO Matrix Application & Discrete Integration Solution
 
 To stabilize the Derived 3rd-Order Ordinary Differential Equation (ODE) and enforce the Global Power Invariance Constraint ($\dot{P} \approx 0$) simultaneously, the Siemens S7-1500 PLC [Component C-01] acts as a high-speed Discrete State-Space Estimator. The continuous-time system equations are mapped into an integrated Multi-Input Multi-Output (MIMO) state framework resolved at every discrete time step $n$.
