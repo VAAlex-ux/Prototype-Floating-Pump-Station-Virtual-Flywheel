@@ -7,11 +7,11 @@
 
 ## A. Executive Abstract
 
-Modern isolated electrical distribution networks (marine IT/Delta ungrounded grids, tactical military microgrids, and remote industrial facilities) experience severe transient sags and catastrophic frequency hunting when subjected to abrupt step-load changes ($\Delta P$) from heavy inductive machinery [Component C-01, 253.4]. Conventional electrical engineering mitigates these sub-cycle disturbances by deploying physical energy-storage hardware assets, such as high-maintenance Battery Energy Storage Systems (BESS), static VAR compensators, or high-vacuum mechanical flywheels.
+Modern isolated electrical distribution networks (marine IT/Delta ungrounded grids, tactical military microgrids, and remote industrial facilities) experience severe transient sags and catastrophic frequency hunting when subjected to abrupt step-load changes ($\Delta P$) from heavy inductive machinery. Conventional electrical engineering mitigates these sub-cycle disturbances by deploying physical energy-storage hardware assets, such as high-maintenance Battery Energy Storage Systems (BESS), static VAR compensators, or high-vacuum mechanical flywheels.
 
-This framework introduces a highly novel, hardware-decoupled **Cyber-Physical Systems (CPS)** paradigm: **The Virtual Power Invariance Matrix**. Instead of adding capital-intensive physical mass or chemical cells, this architecture exploits *pre-existing, under-utilized, purely resistive loads* (such as phase-angle thyristor-modulated AC deck lighting loops or thermal heating banks) to serve as a high-speed, sacrificial dynamic buffer [ENG-02, 253.4]. 
+This framework introduces a highly novel, hardware-decoupled Cyber-Physical Systems (CPS) paradigm: The Virtual Power Invariance Matrix. Instead of adding capital-intensive physical mass or chemical cells, this architecture exploits pre-existing, under-utilized, purely resistive loads (such as phase-angle thyristor-modulated AC deck lighting loops or thermal heating banks) to serve as a high-speed, sacrificial dynamic buffer. 
 
-By continuously calculating the active power derivatives ($dP/dt$) of dynamic process loads at a rigid **10-millisecond hardware task interval**, the central processing unit dynamically enforces a net zero-energy-change condition ($\dot{P} \approx 0$) [253.4]. This algorithm completely isolates the generation source from transient load dynamics, erases source impedance sags, dampens Joulean cable heat losses by **77.5%**, and maintains prime mover thermal efficiency without adding structural weight or hardware costs [253.4].
+By continuously calculating the active power derivatives ($dP/dt$) of dynamic process loads at a rigid 10-millisecond hardware task interval, the central processing unit dynamically enforces a net zero-energy-change condition ($\dot{P} \approx 0$). This algorithm completely isolates the generation source from transient load dynamics, erases source impedance sags, dampens Joulean cable heat losses by **77.5%**, and maintains prime mover thermal efficiency without adding structural weight or hardware costs.
 
 ---
 
@@ -22,10 +22,10 @@ Let a generalized multi-domain power system node be governed by a continuous-tim
 
 $$\dot{\mathbf{X}}(t) = \mathbf{A}\mathbf{X}(t) + \mathbf{B}\mathbf{U}(t) + \mathbf{D}\mathbf{W}(t)$$
 
-Where $\mathbf{W}(t)$ represents an unmeasurable exogeneous environmental disturbance vector. In a hybrid pumping station, the hydraulic process load behaves as a strict **3rd-Order Non-Homogeneous Differential Equation** with three cascaded physical energy-storage elements (lags):
-1. **Rotor Dynamics (Mechanical Lag):** Viscous shaft damping ($b_m$) and fluid reactive hydraulic torque ($\Gamma_{\text{hyd}}$).
-2. **Fluid Acceleration (Mass Inertia Lag):** Newton's second law for fluid mass moving through a rigid line length against pipe friction ($R_{\text{pipe}}$).
-3. **Volumetric Accumulation (Elasticity Lag):** Bulk modulus capacitance ($C_{\text{hose}}$) of flexible hose couplings.
+Where $\mathbf{W}(t)$ represents an unmeasurable exogeneous environmental disturbance vector. In a hybrid pumping station, the hydraulic process load behaves as a strict 3rd-Order Non-Homogeneous Differential Equation with three cascaded physical energy-storage elements (lags):
+1. Rotor Dynamics (Mechanical Lag): Viscous shaft damping ($b_m$) and fluid reactive hydraulic torque ($\Gamma_{\text{hyd}}$).
+2. Fluid Acceleration (Mass Inertia Lag): Newton's second law for fluid mass moving through a rigid line length against pipe friction ($R_{\text{pipe}}$).
+3. Volumetric Accumulation (Elasticity Lag): Bulk modulus capacitance ($C_{\text{hose}}$) of flexible hose couplings.
 
 $$\tau_m \tau_f \tau_p \frac{d^3x_3}{dt^3} + \alpha_2 \frac{d^2x_3}{dt^2} + \alpha_1 \frac{dx_3}{dt} + \alpha_0 x_3(t) = K_{\text{system}} U_{\text{pump}}(t)$$
 
@@ -44,7 +44,7 @@ Where:
 
 $$\frac{dP_{\text{total}}(t)}{dt} \equiv 0 \quad \forall \quad t \ge t_0$$
 
-#### ** Formal Proof:**
+#### Proof:
 Applying the linear differential time operator $\frac{d}{dt}$ across the scalar energy balance space:
 
 $$\frac{dP_{\text{total}}(t)}{dt} = \sum_{j=1}^m \frac{dP_{\text{exogenous,}j}(t)}{dt} + \sum_{i=1}^k \frac{dP_{\text{process,}i}(t)}{dt} + \frac{dP_{\text{compensator}}(t)}{dt}$$
