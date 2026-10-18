@@ -118,7 +118,7 @@ $$
 \gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}
 $$ 
 $$
-\gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \cr \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}
+\gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}
 $$
 
 
