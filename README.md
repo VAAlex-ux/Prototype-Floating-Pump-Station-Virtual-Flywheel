@@ -14,22 +14,20 @@ This framework introduces a highly novel, hardware-decoupled Cyber-Physical Syst
 By continuously calculating the active power derivatives ($dP/dt$) of dynamic process loads at a rigid 10-millisecond hardware task interval, the central processing unit dynamically enforces a net zero-energy-change condition ($\dot{P} \approx 0$). This algorithm completely isolates the generation source from transient load dynamics, erases source impedance sags, dampens Joulean cable heat losses by **77.5%**, and maintains prime mover thermal efficiency without adding structural weight or hardware costs.
 
 ---
-## 2. Structural Plant Modeling & Mathematical Derivations
+## B. Structural Plant Modeling & Mathematical Derivations
 
-### 2.1 System Architecture Overview & Dynamic Physical Model
-Before deriving the governing differential equations, we must map the physical topology of the 160 kW floating pump station. The plant is inherently a multi-domain, coupled electro-hydraulic network. The system comprises a prime mover (either the 160 kW electric motor or the 180 kW diesel ICE) driving a horizontal split-case centrifugal pump through a coaxial shaft configuration. The pump draws water from an unpressurized suction wet-well and discharges it through a rigid steel pipeline segment, which transitions into high-pressure flexible rubber hoses connected to the receiving vessel.
+### B.1 System Architecture Overview & Dynamic Physical Model
+Before deriving the governing differential equations, the physical topology of the 160 kW floating pump station is first explained. The plant is inherently a multi-domain, coupled electro-hydraulic network. The system comprises a prime mover (either the 160 kW electric motor or the 180 kW diesel ICE) driving a horizontal split-case centrifugal pump through a coaxial shaft configuration. The pump draws water from an unpressurized suction wet-well and discharges it through a rigid steel pipeline segment, which transitions into high-pressure flexible rubber hoses connected to the receiving vessel.
 
-To analyze the tracking stability of the Process Variable ($PV$: Discharge Line Pressure), the system cannot be treated as a standard first-order or second-order lag. Energy storage and transfer propagate through three distinct, distinct physical domains in series:
+To analyze the tracking stability of the Process Variable ($PV$: Discharge Line Pressure), the system cannot be treated as a standard first-order or second-order lag. Energy storage and transfer propagate through three distinct physical domains in series:
 
-1.  **The Mechanical Domain (Impeller Inertia):** When the control command changes the drive torque ($\Gamma_{\text{vfd}}$), the system experiences an initial time lag due to the rotor mass and physical inertia of the motor-pump shaft configuration.
-2.  **The Hydrodynamic Domain (Fluid Column Mass):** The rotational acceleration of the impeller blades does not instantly translate into downstream pressure. The system must overcome the physical mass and momentum of thousands of liters of stationary water inside the rigid suction and discharge pipelines.
-3.  **The Volumetric Elastic Domain (Pipe Capacitance):** As the fluid accelerates, it encounters fluid friction and backpressure. The line pressure builds up dynamically as the compressed water volume expands against the volumetric elasticity and capacitance of the flexible rubber hoses.
+1.  The Mechanical Domain (Impeller Inertia): When the control command changes the drive torque ($\Gamma_{\text{vfd}}$), the system experiences an initial time lag due to the rotor mass and physical inertia of the motor-pump shaft configuration.
+2.  The Hydrodynamic Domain (Fluid Column Mass): The rotational acceleration of the impeller blades does not instantly translate into downstream pressure. The system must overcome the physical mass and momentum of thousands of liters of stationary water inside the rigid suction and discharge pipelines.
+3.  The Volumetric Elastic Domain (Pipe Capacitance): As the fluid accelerates, it encounters fluid friction and backpressure. The line pressure builds up dynamically as the compressed water volume expands against the volumetric elasticity and capacitance of the flexible rubber hoses.
 
-Because each energy-storage layer acts as a low-pass filter with its own individual time constant ($\tau_m, \tau_f, \tau_p$), the total composite plant constitutes a strict **3rd-Order System**. If a controller ignores any single layer, the loop will hunt, experience numerical instability, or cause destructive hydraulic water hammers.
+Because each energy-storage layer acts as a low-pass filter with its own individual time constant ($\tau_m, \tau_f, \tau_p$), the total composite plant constitutes a strict 3rd-Order System. If a controller ignores any single layer, the loop will hunt, experience numerical instability, or cause destructive hydraulic water hammers.
 
-### 2.2 Rigorous First-Principles ODE Derivation
-
-We now derive the governing differential equations from fundamental physical laws for each independent energy-storage layer:
+### B.2 ODE Derivation
 
 #### Layer 1: Rotor Rotational Dynamics (Mechanical Domain)
 Applying Newton's second law for rotational systems, the angular acceleration of the impeller velocity $x_1(t)$ is driven by the active input torque reference $U_{\text{pump}}(t)$ minus internal viscous shaft friction ($b_m$) and the reactive hydraulic torque load ($\Gamma_{\text{hyd}}$) exerted by the fluid. Linearizing the fluid torque load relative to flow rate such that $\Gamma_{\text{hyd}} \approx \gamma x_2(t)$:
@@ -46,8 +44,8 @@ Applying the hydrodynamic continuity equation combined with the fluid bulk modul
 
 $$\tau_p \frac{dx_3(t)}{dt} = x_2(t) - C_{\text{hose}} x_3(t)$$
 
-#### The Classical Reduction to a Single 3rd-Order ODE:
-To find the absolute characteristic equation of the plant in terms of our Process Variable ($x_3$), we must algebraically decouple and eliminate the intermediate state variables ($x_1$ and $x_2$).
+#### Classical Reduction to a Single 3rd-Order ODE:
+To find the absolute characteristic equation of the plant in terms of the Process Variable ($x_3$), we must algebraically decouple and eliminate the intermediate state variables ($x_1$ and $x_2$).
 
 First, we rewrite the Layer 3 volumetric accumulation equation (3) to isolate the flow rate state $x_2(t)$:
 
@@ -57,7 +55,7 @@ Differentiating equation (4) once with respect to time ($t$) yields the flow acc
 
 $$\frac{dx_2(t)}{dt} = \tau_p \frac{d^2x_3(t)}{dt^2} + C_{\text{hose}} \frac{dx_3(t)}{dt}$$
 
-We now substitute this expression for $\frac{dx_2}{dt}$ directly into the Layer 2 water column momentum equation (2):
+Now substitute this expression for $\frac{dx_2}{dt}$ directly into the Layer 2 water column momentum equation (2):
 
 $$\tau_p \frac{d^2x_3(t)}{dt^2} + C_{\text{hose}} \frac{dx_3(t)}{dt} = \frac{1}{\tau_f} \left[ K_{\text{pump}} x_1(t) - R_{\text{pipe}}\left( \tau_p \frac{dx_3(t)}{dt} + C_{\text{hose}} x_3(t) \right) - x_3(t) \right]$$
 
@@ -69,11 +67,11 @@ To eliminate the final remaining intermediate motor speed state ($x_1$), we diff
 
 $$K_{\text{pump}} \frac{dx_1(t)}{dt} = \tau_f \tau_p \frac{d^3x_3(t)}{dt^3} + (\tau_f C_{\text{hose}} + R_{\text{pipe}} \tau_p) \frac{d^2x_3(t)}{dt^2} + (1 + R_{\text{pipe}} C_{\text{hose}}) \frac{dx_3(t)}{dt}$$
 
-We can now substitute the Layer 1 rotor dynamic acceleration expression (1) directly into the left side of equation (8):
+Now substitute the Layer 1 rotor dynamic acceleration expression (1) directly into the left side of equation (8):
 
 $$K_{\text{pump}} \left[ \frac{1}{\tau_m} \left( U_{\text{pump}}(t) - b_m x_1(t) - \gamma x_2(t) \right) \right] = \tau_f \tau_p \frac{d^3x_3(t)}{dt^3} + (\tau_f C_{\text{hose}} + R_{\text{pipe}} \tau_p) \frac{d^2x_3(t)}{dt^2} + (1 + R_{\text{pipe}} C_{\text{hose}}) \frac{dx_3(t)}{dt}$$
 
-Multiply the entire system through by $\tau_m$ and substitute the algebraic expressions for $x_1(t)$ (from equation 7) and $x_2(t)$ (from equation 4). Collecting matching derivative terms yields the final, rigorous **3rd-Order Non-Homogeneous Ordinary Differential Equation** executed within the central control core [253.4]:
+Multiply the entire system through by $\tau_m$ and substitute the algebraic expressions for $x_1(t)$ (from equation 7) and $x_2(t)$ (from equation 4). Collecting matching derivative terms yields the final 3rd-Order Non-Homogeneous Ordinary Differential Equation executed within the central control core:
 
 $$\mathbf{\tau_m \tau_f \tau_p \frac{d^3x_3(t)}{dt^3} + \alpha_2 \frac{d^2x_3(t)}{dt^2} + \alpha_1 \frac{dx_3(t)}{dt} + \alpha_0 x_3(t) = K_{\text{system}} U_{\text{pump}}(t) \quad \blacksquare}$$
 
