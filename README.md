@@ -117,7 +117,6 @@ $$
 \gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}
 $$
 
-3. **Calculate the $s^0$ Row Coefficient ($\gamma_2$):**
 $$
 \gamma_2 = \frac{-1}{\gamma_1} \det \begin{bmatrix} \lambda_2 & \lambda_0 + K_p K_{\text{system}} \\ \gamma_1 & 0 \end{bmatrix} = \frac{- \left( 0 -        \gamma_1 (\lambda_0 + K_p K_{\text{system}}) \right)}{\gamma_1} = \lambda_0 + K_p K_{\text{system}}
 $$
