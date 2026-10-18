@@ -133,7 +133,7 @@ Since $\lambda_2 > 0$, the numerator must evaluate to zero:
 $$\lambda_2 \lambda_1 - \lambda_3 \lambda_0 - \lambda_3 K_u K_{\text{system}} = 0$$
 
 Isolating the critical marginal parameter yields the formal definition of the **Ultimate Gain ($K_u$)**:
-$$\lambda_3 K_u K_{\text{system}} = \lambda_2 \lambda_1 - \lambda_3 \lambda_0 \implies \mathbf{K_u = \frac{\lambda_2 \lambda_1 - \lambda_3 \lambda_0}{\lambda_3 K_{\text{system}}} = 7.15 \quad \blacksquare}$$
+$$\lambda_3 K_u K_{\text{system}} = \lambda_2 \lambda_1 - \lambda_3 \lambda_0 \implies \mathbf{K_u = \frac{\lambda_2 \lambda_1 - \lambda_3 \lambda_0}{\lambda_3 K_{\text{system}}} = 7.15}$$
 
 ---
 
@@ -151,7 +151,7 @@ Solving for the complex roots confirms that a pair of poles sits exactly on the 
 $$s = \pm j \sqrt{\frac{\lambda_1}{\lambda_3}} \implies \omega_u = \sqrt{\frac{\lambda_1}{\lambda_3}}$$
 
 Where $\omega_u$ represents the critical ultimate angular cross-over frequency ($\text{rad/s}$). The **Ultimate Period ($P_u$)** registered by the digital PLC is the exact bijective time-mapping of this radial oscillation speed:
-$$\mathbf{P_u = \frac{2\pi}{\omega_u} = 2\pi \sqrt{\frac{\lambda_3}{\lambda_1}} = 1.95 \text{ seconds} \quad \blacksquare}$$
+$$\mathbf{P_u = \frac{2\pi}{\omega_u} = 2\pi \sqrt{\frac{\lambda_3}{\lambda_1}} = 1.95 \text{ seconds}}$$
 
 #### Step 5: Final Tuning Coefficient Matrix Assignment
 Using the mathematically extracted boundaries ($K_u = 7.15, P_u = 1.95\text{ s}$), the classical closed-loop Ziegler-Nichols optimization tuning laws design the ideal continuous zeros to stabilize the 3rd-order root locus paths:
