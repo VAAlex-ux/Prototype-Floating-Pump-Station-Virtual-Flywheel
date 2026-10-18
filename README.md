@@ -73,7 +73,7 @@ $$K_{\text{pump}} \left[ \frac{1}{\tau_m} \left( U_{\text{pump}}(t) - b_m x_1(t)
 
 Multiply the entire system through by $\tau_m$ and substitute the algebraic expressions for $x_1(t)$ (from equation 7) and $x_2(t)$ (from equation 4). Collecting matching derivative terms yields the final 3rd-Order Non-Homogeneous Ordinary Differential Equation executed within the central control core:
 
-$$\mathbf{\tau_m \tau_f \tau_p \frac{d^3x_3(t)}{dt^3} + \alpha_2 \frac{d^2x_3(t)}{dt^2} + \alpha_1 \frac{dx_3(t)}{dt} + \alpha_0 x_3(t) = K_{\text{system}} U_{\text{pump}}(t) \quad \blacksquare}$$
+$$\mathbf{\tau_m \tau_f \tau_p \frac{d^3x_3(t)}{dt^3} + \alpha_2 \frac{d^2x_3(t)}{dt^2} + \alpha_1 \frac{dx_3(t)}{dt} + \alpha_0 x_3(t) = K_{\text{system}} U_{\text{pump}}(t)}$$
 
 Where the structural tracking coefficients are explicitly defined by the plant's hardware constants:
 *   $\alpha_2 = \tau_m \tau_f C_{\text{hose}} + \tau_m \tau_p R_{\text{pipe}} + \tau_f \tau_p b_m$
