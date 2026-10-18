@@ -83,6 +83,33 @@ Where the structural tracking coefficients are explicitly defined by the plant's
 
 This complete derivation proves that the line pressure is linked to a 3rd-order derivative ($\frac{d^3x_3}{dt^3}$), which the Virtual Ziegler-Nichols matrix cancels out numerically every 10 milliseconds using Tustin/Euler discretization parameters.
 
+### 2.3 Real-Time MIMO Matrix Application & Discrete Integration Solution
+
+To stabilize the Derived 3rd-Order Ordinary Differential Equation (ODE) and enforce the Global Power Invariance Constraint ($\dot{P} \approx 0$) simultaneously, the Siemens S7-1500 PLC [Component C-01] acts as a high-speed Discrete State-Space Estimator. The continuous-time system equations are mapped into an integrated Multi-Input Multi-Output (MIMO) state framework resolved at every discrete time step $n$.
+
+#### Step 1: Polynomial Pole Cancellation via Ziegler-Nichols Zeros
+The continuous characteristic equation of the fluid system presents a 3rd-order denominator layout:
+$$A(s) = \lambda_3 s^3 + \lambda_2 s^2 + \lambda_1 s + \lambda_0 = 0$$
+
+By applying the ultimate marginal parameters derived via the Routh-Hurwitz array ($K_u = 7.15, P_u = 1.95\text{ s}$), the Ziegler-Nichols matrix calculates the independent PID controller zeros to manipulate the root locus curves:
+$$G_c(s) = K_p + \frac{K_i}{s} + K_d s = \frac{K_d s^2 + K_p s + K_i}{s}$$
+
+This controller adds two complex zeros exactly calculated to bend the 3rd-order root locus trajectories away from the imaginary axis ($j\omega$-axis) and pull them deep into the left-half stable complex plane, forcing the physical 3rd-order acceleration transient ($\frac{d^3x_3}{dt^3}$) to decay asymptotically toward zero.
+
+#### Step 2: High-Speed Discrete Approximation (Euler/Tustin Discretization)
+An industrial PLC cannot compute analytical integrals or continuous derivatives ($dx/dt$). The central processing unit converts the continuous ZN polynomial into discrete algebraic addition loops based on its fixed cyclic interrupt time step ($\Delta t = 0.01\text{ s}$ via OB30). 
+
+Let the pressure tracking error at the current cycle be $e[n] = SP_{\text{Pressure}} - PV_{\text{Pressure}}[n]$. The continuous operators are discretized using the Backward Difference method:
+*   **Integral Approximation:** $\int e(t)dt \approx \sum (e[n] \cdot \Delta t)$
+*   **Derivative Approximation:** $\frac{de(t)}{dt} \approx \frac{e[n] - e[n-1]}{\Delta t}$
+
+The structural algorithm executes the master pump control command output ($U_{\text{pump}}$) sequentially through this digital equation:
+$$U_{\text{pump}}[n] = U_{\text{pump}}[n-1] + K_p(e[n] - e[n-1]) + K_i \Delta t e[n] + \frac{K_d}{\Delta t}(e[n] - 2e[n-1] + e[n-2])$$
+
+#### Step 3: Real-Time Vector Decoupling for Power Cancellation ($\dot{P} \approx 0$)
+The true novelty of the automation design manifests immediately after the pump command is resolved. The PLC treats the entire platform as a single, breathing energy matrix. Every 10 milliseconds, the processor executes the following sequential vector loop inside its memory registers:
+
+
 ## B. Rigorous Mathematical Foundations & General Theorem
 
 ### B.1 The Multi-Domain MIMO State-Space System
