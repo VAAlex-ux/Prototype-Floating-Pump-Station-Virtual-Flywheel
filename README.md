@@ -120,9 +120,9 @@ $$
 
 
 3. **Calculate the $s^0$ Row Coefficient ($\gamma_2$):**
-   $$
-   \gamma_2 = \frac{-1}{\gamma_1} \det \begin{bmatrix} \lambda_2 & \lambda_0 + K_p K_{\text{system}} \\ \gamma_1 & 0 \end{bmatrix} = \frac{- \left( 0 -        \gamma_1 (\lambda_0 + K_p K_{\text{system}}) \right)}{\gamma_1} = \lambda_0 + K_p K_{\text{system}}
-   $$
+$$
+\gamma_2 = \frac{-1}{\gamma_1} \det \begin{bmatrix} \lambda_2 & \lambda_0 + K_p K_{\text{system}} \\ \gamma_1 & 0 \end{bmatrix} = \frac{- \left( 0 -        \gamma_1 (\lambda_0 + K_p K_{\text{system}}) \right)}{\gamma_1} = \lambda_0 + K_p K_{\text{system}}
+$$
 
 ---
 
