@@ -115,9 +115,9 @@ Where the structural row elements $\gamma_1$ and $\gamma_2$ are calculated stric
 
 1. **Calculate the $s^1$ Row Coefficient ($\gamma_1$):**
    $$\gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\\\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}$$
-   $$
-\gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\\\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac{\lambda_2 \lambda_1 - \lambda_3 (\lambda_0 + K_p K_{\text{system}})}{\lambda_2}
-$$
+
+   ```math
+\(\gamma_1 = \frac{-1}{\lambda_2} \det \begin{bmatrix} \lambda_3 & \lambda_1 \\ \lambda_2 & \lambda_0 + K_p K_{\text{system}} \end{bmatrix} = \frac\){\(\lambda_2 \lambda_1 - \lambda_3\) (\(\lambda_0 +\) K_p \(K_{\text{system}}\))}\({\lambda_2} \%\%\)MAGIT_PARSER_PROTECT%%```
 
 
 3. **Calculate the $s^0$ Row Coefficient ($\gamma_2$):**
